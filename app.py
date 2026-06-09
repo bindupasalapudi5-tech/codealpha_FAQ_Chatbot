@@ -1,3 +1,4 @@
+import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -14,19 +15,12 @@ questions = list(faqs.keys())
 vectorizer = TfidfVectorizer()
 question_vectors = vectorizer.fit_transform(questions)
 
-print("FAQ Chatbot")
-print("Type 'exit' to quit")
+st.title("FAQ Chatbot")
 
-while True:
-    user_input = input("You: ")
+user_input = st.text_input("Ask a question")
 
-    if user_input.lower() == "exit":
-        break
-
+if user_input:
     user_vector = vectorizer.transform([user_input])
-
     similarity = cosine_similarity(user_vector, question_vectors)
-
     best_match = similarity.argmax()
-
-    print("Bot:", faqs[questions[best_match]])
+    st.write("Bot:", faqs[questions[best_match]])
